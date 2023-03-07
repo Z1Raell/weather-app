@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(110, 209, 239);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.search {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: rgb(183, 228, 224);
+    border-radius: 50%;
+    font-size: 16px;
+    transition: all 0.5s ease-in;
+    cursor: pointer;
+}
+
+.search:hover {
+    background-color: rgb(66, 211, 199);;
+}
+
+.container {
+    background-color: whitesmoke;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    width: 30em;
+    padding: 2em 3em;
+    box-shadow: 5px 5px 15px #3e8285;
+    transition: all 0.6s ease-out;
+}
+.input-group {
+    width: 100%;
+    height: min-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-bottom: 1px solid black;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+}
+
+.input-group input {
+    width: 80%;
+    border: none;
+    font-size: 24px;
+    text-transform: uppercase;
+    outline: none;
+}
+
+.input-group input::placeholder {
+    font-size: 20px;
+}
+
+.weather-details {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.humidity,.wind  {
+    display: flex;
+    height: 100%;
+    
+}
+.error404,.error,.sucsses {
+    display: none;  
+}
+
+.humidity  i, .wind i  {
+    margin-right: 5px;
+    font-size: 34px;
+}
+
+.text span {
+    font-size: 20px;
+}
+
+.weather-box  {
+    text-align: center;
+}
+.weather-box img{
+    width: 60%;
+    margin-top: 30px;
+}
+.temperature {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 15px;
+     
+}
+.description {
+    font-size: 16px;
+}
+
+
+
+
