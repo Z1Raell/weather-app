@@ -1,4 +1,4 @@
-let key = 'cfd642a0da5691003f0f5a9927e84022'
+const API_KEY = 'cfd642a0da5691003f0f5a9927e84022'
 
 
 /* creating a function to set the initial block display values */
@@ -16,76 +16,80 @@ function initialStateVisibility() {
 /* Getting weather data with the openweathermap API */
 
 async function getWeather(city) {
-    let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`);
-    let result = await res.json()
+
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`);
+    const result = await res.json();
+    console.log(result);
     return result;
 }
 
 document.querySelector('.search').addEventListener('click', async () => {
     let city = document.querySelector('#city');
-
     if (city.value === '') {
-        return
+        return;
     }
+    try {
+        let weather = await getWeather(city.value);
+        if (weather.cod >= 200 && weather.cod < 300) {
+            initialStateVisibility();
+            displayWeather(weather);
+        } else if (weather.cod === `404`) {
+            initialStateVisibility();
+            displayError404();
+        } else {
+            initialStateVisibility();
+            displayError(weather);
+        }
+    } catch (error) {
+        console.log(error);
+        if (error.cod === 404) {
+            console.log(hi);
+            initialStateVisibility();
+            displayError404();
+        } else {
+            initialStateVisibility();
+            displayError(error);
+        }
+    }
+});
 
-    let weather = await getWeather(city.value);
-
-    if (weather.cod >= 200 && weather.cod < 300) {
-        initialStateVisibility();
-        console.log(weather);
-        displayWeather(weather)
-    }
-    if (weather.cod === 404) {
-        initialStateVisibility();
-        displayError404()
-    }
-    if (weather.cod >= 400 && weather.cod < 600 && weather.cod !== 404) {
-        initialStateVisibility();
-        displayError404(weather)
-    }
-})
 
 /* weather display function  */
 
 function displayWeather(weather) {
-
+    const {
+        weather: [{ main, description }],
+        main: { temp, humidity },
+        wind: { speed }
+    } = weather;
     let img = document.querySelector('.weather-box img');
     let succsec = document.querySelector('.sucsses');
     let temperature = document.querySelector('.temperature');
-    let description = document.querySelector('.description');
+    let descriptionEl = document.querySelector('.description');
     let windSpead = document.querySelector('.wind .text span');
-    let humidity = document.querySelector('.humidity .text span');
-
-
+    let humidityEl = document.querySelector('.humidity .text span');
 
     succsec.style.display = 'block';
 
-    temperature.innerHTML = `${Math.round(weather.main.temp - 273)}&degC`;
-    description.innerHTML = weather.weather[0].description;
-    windSpead.innerHTML = `${weather.wind.speed} km/h`;
-    humidity.innerHTML = `${weather.main.humidity}%`
+    temperature.innerHTML = `${Math.round(temp - 273)}&degC`;
+    descriptionEl.innerHTML = description;
+    windSpead.innerHTML = `${speed} km/h`;
+    humidityEl.innerHTML = `${humidity}%`;
 
-
-
-    switch (weather.weather[0].main) {
+    switch (main) {
         case 'Clear':
-            img.src = '/images/clear.png'
-            break
+            img.src = '/images/clear.png';
+            break;
         case 'Clouds':
-            img.src = '/images/cloud.png'
-            break
+            img.src = '/images/cloud.png';
+            break;
         case 'Mist':
-            img.src = '/images/mist.png'
-            break
+            img.src = '/images/mist.png';
+            break;
         case 'Rain':
-            img.src = '/images/rain.png'
-            break
-        case 'Snow':
-            img.src = '/images/snow.png'
-            break
+            img.src = '/images/rain.png';
     }
 }
-
 /* function display error city not founded */
 
 function displayError404() {
