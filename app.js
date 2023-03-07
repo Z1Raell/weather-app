@@ -1,7 +1,7 @@
 let key = 'cfd642a0da5691003f0f5a9927e84022'
-/* API call */
 
-/* https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key} */
+
+/* creating a function to set the initial block display values */
 
 function initialStateVisibility() {
     let error404 = document.querySelector('.error404');
@@ -13,10 +13,12 @@ function initialStateVisibility() {
     error.style.display = 'none';
 }
 
+/* Getting weather data with the openweathermap API */
+
 async function getWeather(city) {
     let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`);
     let result = await res.json()
-    return result
+    return result;
 }
 
 document.querySelector('.search').addEventListener('click', async () => {
@@ -33,15 +35,17 @@ document.querySelector('.search').addEventListener('click', async () => {
         console.log(weather);
         displayWeather(weather)
     }
-    if(weather.cod === 404) {
+    if (weather.cod === 404) {
         initialStateVisibility();
         displayError404()
     }
-    if(weather.cod >= 400 && weather.cod < 600 && weather.cod !== 404 ) {
+    if (weather.cod >= 400 && weather.cod < 600 && weather.cod !== 404) {
         initialStateVisibility();
-        displayError404()
+        displayError404(weather)
     }
 })
+
+/* weather display function  */
 
 function displayWeather(weather) {
 
@@ -50,13 +54,13 @@ function displayWeather(weather) {
     let temperature = document.querySelector('.temperature');
     let description = document.querySelector('.description');
     let windSpead = document.querySelector('.wind .text span');
-    let humidity =document.querySelector('.humidity .text span');
+    let humidity = document.querySelector('.humidity .text span');
 
-    
+
 
     succsec.style.display = 'block';
 
-    temperature.innerHTML = `${Math.round(weather.main.temp-273)}&degC`;
+    temperature.innerHTML = `${Math.round(weather.main.temp - 273)}&degC`;
     description.innerHTML = weather.weather[0].description;
     windSpead.innerHTML = `${weather.wind.speed} km/h`;
     humidity.innerHTML = `${weather.main.humidity}%`
@@ -82,13 +86,18 @@ function displayWeather(weather) {
     }
 }
 
+/* function display error city not founded */
+
 function displayError404() {
     let error404 = document.querySelector('.error404');
     error404.style.display = 'block'
 }
 
-function displayError() {
+/* function display other error */
+function displayError(data) {
     let error = document.querySelector('.error');
-    error.style.display = 'block'
+    let errorInfo = document.querySelector('.error p');
+    error.style.display = 'block';
+    errorInfo.innerHTML = `Oops! Somthing is wrong: ${data.cod}`
 }
 
