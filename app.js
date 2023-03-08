@@ -16,11 +16,15 @@ function initialStateVisibility() {
 /* Getting weather data with the openweathermap API */
 
 async function getWeather(city) {
-
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`);
-    const result = await res.json();
-    console.log(result);
-    return result;
+    try {
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`);
+        const result = await res.json();
+        console.log(result);
+        return result;
+    }
+     catch (error) {
+        throw new Error('Oops somthing is wrong')
+    }
 }
 
 document.querySelector('.search').addEventListener('click', async () => {
@@ -33,23 +37,15 @@ document.querySelector('.search').addEventListener('click', async () => {
         if (weather.cod >= 200 && weather.cod < 300) {
             initialStateVisibility();
             displayWeather(weather);
-        } else if (weather.cod === `404`) {
+        }
+        if (weather.cod === `404`) {
             initialStateVisibility();
             displayError404();
-        } else {
-            initialStateVisibility();
-            displayError(weather);
         }
     } catch (error) {
-        console.log(error);
-        if (error.cod === 404) {
-            console.log(hi);
-            initialStateVisibility();
-            displayError404();
-        } else {
-            initialStateVisibility();
-            displayError(error);
-        }
+
+        initialStateVisibility();
+        displayError(error);
     }
 });
 
@@ -88,6 +84,9 @@ function displayWeather(weather) {
             break;
         case 'Rain':
             img.src = '/images/rain.png';
+            break
+        case 'Snow':
+            img.src = '/images/snow.png';
     }
 }
 /* function display error city not founded */
