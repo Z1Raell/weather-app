@@ -22,8 +22,8 @@ async function getWeather(city) {
         console.log(result);
         return result;
     }
-     catch (error) {
-        throw new Error('Oops somthing is wrong')
+    catch (error) {
+        return error
     }
 }
 
@@ -41,9 +41,11 @@ document.querySelector('.search').addEventListener('click', async () => {
         if (weather.cod === `404`) {
             initialStateVisibility();
             displayError404();
+        } else {
+            initialStateVisibility();
+            displayError(weather);
         }
     } catch (error) {
-
         initialStateVisibility();
         displayError(error);
     }
